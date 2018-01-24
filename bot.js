@@ -8,11 +8,10 @@ const START_TIME = new Date();
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
-const Reactions = require('./Reactions');
+const ReactionLoader = require('./ReactionLoader');
 const QueryResolver = require('./QueryResolver');
 
 process.on('unhandledRejection', r => logger.error('unhandledRejection: ',r.stack,'\n',r));
-
 
 //Commands
 bot.hears(new RegExp('\/start|\/start@' + BOT_USERNAME), (context) => {
@@ -30,6 +29,16 @@ bot.hears(new RegExp('\/ping|\/ping@' + BOT_USERNAME), (context) => {
 	context.reply('pong');
 });
 bot.hears(new RegExp('\/uptime|\/uptime@' + BOT_USERNAME), (context) => {
+	context.reply(''+prettyMs(new Date() - START_TIME));
+});
+bot.hears(new RegExp('\/thischat|\/thischat@' + BOT_USERNAME), (context) => {
+	context.reply(JSON.stringify(context.update));
+});
+bot.hears(new RegExp('\/requestreaction|\/requestreaction@' + BOT_USERNAME), (context) => {
+	//let hash = ReactionLoader.addToQueue();
+	context.telegram.sendMessage(process.env.TELEGRAM_CHANNEL_QUEUE_ID, 'ID: '+hash);
+});
+bot.hears(new RegExp('\/confirm|\/confirm@' + BOT_USERNAME), (context) => {
 	context.reply(''+prettyMs(new Date() - START_TIME));
 });
 

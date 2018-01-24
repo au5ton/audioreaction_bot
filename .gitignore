@@ -69,3 +69,5 @@ synonyms.db
 */Thumbs.db
 
 # maybe i should add more things
+reaction_queue.json
+reaction_live.json

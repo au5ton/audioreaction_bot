@@ -1,6 +1,6 @@
 // QueryResolver.js
 
-const Reactions = require('./Reactions');
+const ReactionLoader = require('./ReactionLoader');
 const _ = {};
 
 
