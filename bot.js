@@ -41,8 +41,8 @@ bot.hears(new RegExp('\/requestreaction|\/requestreaction@' + BOT_USERNAME), (co
 	let title = message.split(' ').slice(1,message.split(' ').length-1).join(' ');
 	let url = message.split(' ')[message.split(' ').length-1];
 	let hash = ReactionLoader.addToQueue(title,url);
-	if(hash === null) {
-        context.reply('That reaction has already been submitted.');
+	if(hash === null || title === '' || url === ' /requestreaction') {
+        context.reply('That reaction can\'t be submitted.');
     }
     else {
         context.telegram.sendMessage(process.env.TELEGRAM_CHANNEL_QUEUE_ID, 'ID: '+hash+'\nTitle: '+title+'\nURL: '+url);
