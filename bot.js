@@ -18,7 +18,7 @@ process.on('unhandledRejection', r => logger.error('unhandledRejection: ',r.stac
 bot.hears(new RegExp('\/start|\/start@' + BOT_USERNAME), (context) => {
 	context.getChat().then((chat) => {
 		if(chat.type === 'private') {
-			context.reply('Welcome! I\'m intended for inline use only. Please try to type my name and see what I offer you.\nhttps://github.com/au5ton/audioreaction_bot/issues',{
+			context.reply('Welcome! I\'m intended for inline use only. Please try to type my name and see what I offer you. If you want to submit your own, use the /requestreaction command. If it\'s a real mp3, I\'ll approve it. This is to prevent spam.\nhttps://github.com/au5ton/audioreaction_bot/issues',{
 		  	  disable_web_page_preview: true
 		    });
 		}
