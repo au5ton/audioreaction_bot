@@ -2,7 +2,9 @@ require('dotenv').config(); //get the environment variables described in .env
 const Telegraf = require('telegraf')
 const logger = require('au5ton-logger');
 logger.setOption('prefix_date',true);
+const prettyMs = require('pretty-ms');
 var BOT_USERNAME;
+const START_TIME = new Date();
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -26,6 +28,9 @@ bot.hears(new RegExp('\/start|\/start@' + BOT_USERNAME), (context) => {
 });
 bot.hears(new RegExp('\/ping|\/ping@' + BOT_USERNAME), (context) => {
 	context.reply('pong');
+});
+bot.hears(new RegExp('\/uptime|\/uptime@' + BOT_USERNAME), (context) => {
+	context.reply(''+prettyMs(new Date() - START_TIME));
 });
 
 //Inline queries
