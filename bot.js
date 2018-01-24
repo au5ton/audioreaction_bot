@@ -35,10 +35,13 @@ bot.hears(new RegExp('\/thischat|\/thischat@' + BOT_USERNAME), (context) => {
 	context.reply(JSON.stringify(context.update));
 });
 bot.hears(new RegExp('\/requestreaction|\/requestreaction@' + BOT_USERNAME), (context) => {
-	//let hash = ReactionLoader.addToQueue();
-	context.telegram.sendMessage(process.env.TELEGRAM_CHANNEL_QUEUE_ID, 'ID: '+hash);
+	let message = context.update.message.text;
+	let title = message.split(' ').slice(1,message.split(' ').length-1).join(' ');
+	let url = message.split(' ')[message.split(' ').length-1];
+	let hash = ReactionLoader.addToQueue(title,url);
+	context.telegram.sendMessage(process.env.TELEGRAM_CHANNEL_QUEUE_ID, 'ID: '+hash+'\nTitle: '+title+'\nURL: '+url);
 });
-bot.hears(new RegExp('\/confirm|\/confirm@' + BOT_USERNAME), (context) => {
+bot.hears(new RegExp('\/submitlive|\/submitlive@' + BOT_USERNAME), (context) => {
 	context.reply(''+prettyMs(new Date() - START_TIME));
 });
 
