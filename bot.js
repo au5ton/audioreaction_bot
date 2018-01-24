@@ -6,10 +6,13 @@ var BOT_USERNAME;
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const Reactions = require('./Reactions');
+const QueryResolver = require('./QueryResolver');
 
 process.on('unhandledRejection', r => logger.error('unhandledRejection: ',r.stack,'\n',r));
 
 
+//Commands
 bot.hears(new RegExp('\/start|\/start@' + BOT_USERNAME), (context) => {
 	context.getChat().then((chat) => {
 		if(chat.type === 'private') {
@@ -21,9 +24,29 @@ bot.hears(new RegExp('\/start|\/start@' + BOT_USERNAME), (context) => {
 		//
 	});
 });
-
 bot.hears(new RegExp('\/ping|\/ping@' + BOT_USERNAME), (context) => {
 	context.reply('pong');
+});
+
+//Inline queries
+bot.on('inline_query', (context) => {
+    let query = context.update.inline_query.query;
+    if(query === '') {
+        //grab first 5 just to show something, maybe adjust this to a "popular reactions" thing
+        context.answerInlineQuery(Reactions.slice(0,5)).catch((err) => {
+            logger.error('answerInlineQuery failed to send: ',err)
+        });
+    }
+    else {
+        QueryResolver.search(query).then((results) => {
+            context.answerInlineQuery(results).catch((err) => {
+                logger.error('answerInlineQuery failed to send: ',err)
+            });
+        }).catch((err) => {
+            logger.error('QueryResolver failed to resolve: ',err)
+        })
+    }
+
 });
 
 
