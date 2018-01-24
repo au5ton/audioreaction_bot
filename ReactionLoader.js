@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const crypto = require('crypto');
+const logger = require('au5ton-logger');
 
 const _ = {};
 
@@ -80,7 +81,7 @@ _.submitLive = (queueId) => {
 };
 
 _.refreshCache = () => {
-	if(fs.existsSync('reaction_live.json')) {
+	if(!fs.existsSync('reaction_live.json')) {
 		_.writeCacheToDisk();
 	}
 	try {
@@ -102,7 +103,7 @@ _.refreshCache = () => {
 	}
 };
 _.refreshQueueCache = () => {
-	if(fs.existsSync('reaction_queue.json')) {
+	if(!fs.existsSync('reaction_queue.json')) {
 		_.writeQueueCacheToDisk();
 	}
 	try {
