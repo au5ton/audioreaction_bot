@@ -23,6 +23,13 @@ _.generateHash = (data) => {
 	return crypto.createHash('md5').update(data).digest('hex');
 }
 
+_.getLiveCache = () => {
+	return livecache;
+};
+
+_.getQueueCache = () => {
+	return queuecache;
+}
 
 _.getById = (id) => {
 	for(let i in livecache) {
@@ -30,6 +37,7 @@ _.getById = (id) => {
 			return livecache[i];
 		}
 	}
+	return null;
 }
 
 _.getQueueById = (id) => {
@@ -38,12 +46,13 @@ _.getQueueById = (id) => {
 			return queuecache[i];
 		}
 	}
+	return null;
 }
 
 _.removeById = (id) => {
-	for(let i in livecache) {
+	for(let i = 0; i < livecache.length; i++) {
 		if(livecache[i].id === id) {
-			delete livecache[i];
+			livecache.splice(i, 1);
 		}
 	}
 }
@@ -58,6 +67,12 @@ _.removeQueueById = (id) => {
 
 _.addToQueue = (title,url) => {
 	let hash = _.generateHash(url);
+	for(let i = 0; i < queuecache.length; i++) {
+		if(queuecache[i].id === hash) {
+			//this file is already present in the database under a different name
+			return null;
+		}
+	}
 	queuecache.push({
 		type: 'voice',
 		id: hash,
@@ -78,6 +93,7 @@ _.submitLive = (queueId) => {
 	_.removeQueueById(temp.id); //this happens because JS is consolidating memory
 	_.writeCacheToDisk();
 	_.writeQueueCacheToDisk();
+	return temp.id;
 };
 
 _.refreshCache = () => {
