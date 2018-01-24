@@ -1,5 +1,5 @@
 # audioreaction_bot
-:robot: Telegram bot
+:robot: Telegram bot for reacting with memey sound bites
 
 Live bot: http://t.me/audioreaction_bot
 
